@@ -1,0 +1,30 @@
+version: "2"
+services: 
+  rocm-a1111:
+    build: .
+    cap_add:
+      - SYS_PTRACE
+    devices:
+      - /dev/kfd:/dev/kfd
+      - /dev/dri:/dev/dri
+    ipc: host
+    security_opt:
+      - seccomp:unconfined
+    group_add:
+      - video
+      - render
+    ports:
+      - 7860:7860
+    volumes:
+      - app:app
+    environment:
+      # Needed for 6XXX series GPUs
+      - HSA_OVERRIDE_GFX_VERSION=10.3.0
+      # PyTorch index override for ROCm
+      - PYTORCH_INDEX=https://download.pytorch.org/whl/nightly/rocm6.0
+      # Allows for more use of the VRAM cache
+      - PYTORCH_HIP_ALLOC_CONF=garbage_collection_threshold:0.9,max_split_size_mb:256
+    # Supplied as parameters to the web-ui
+    command: --precision full --no-half
+volumes:
+  app:
