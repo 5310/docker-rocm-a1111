@@ -36,5 +36,5 @@ RUN python -m venv venv && \
 
 EXPOSE 7860
 
-ENTRYPOINT [ "git", "config", "--global", "--add", "safe.directory", "\"*\"", "&&", "source", "venv/bin/activate", "&&", "python", "launch.py" ]
+ENTRYPOINT [ "/bin/sh", "-c", "git config --global --add safe.directory \"*\" && source venv/bin/activate && python launch.py" ]
 CMD [ "--precision", "full", "--no-half" ]
