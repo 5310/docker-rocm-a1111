@@ -13,7 +13,7 @@ This Docker container sets up Stable-Diffusion using AUTOMATIC1111/stable-diffus
 
 ## Usage
 
-A deploy the composefile to automatically create the app folder with the web-ui that you can add stuff to and run it.
+Deploy the composefile to automatically create the app folder with the web-ui that you can add stuff to and run it.
 
 ```bash
 git clone --depth 1 https://github.com/5310/docker-rocm-a1111
@@ -23,7 +23,7 @@ docker-compose up
 
 ## Update
 
-Rebuild the image and container to (try to) update the app, while retaining your models folder, etc.
+Rebuild the image and container to (try to) update the app, and underlying dependencies, while retaining your models folder, etc.
 
 ```bash
 docker-compose up --build --force-recreate
