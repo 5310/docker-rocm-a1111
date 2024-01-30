@@ -19,7 +19,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
     PYTHONIOENCODING=UTF-8 \
     REQS_FILE='requirements.txt'
 
-ARG PYTORCH_INDEX=https://download.pytorch.org/whl/nightly/rocm6.0
+ARG PYTORCH_INDEX=https://download.pytorch.org/whl/rocm5.6
 
 RUN python -m venv venv && \
     source venv/bin/activate && \

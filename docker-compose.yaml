@@ -22,7 +22,7 @@ services:
       context: .
       args:
         # PyTorch index override for ROCm
-        - PYTORCH_INDEX=https://download.pytorch.org/whl/nightly/rocm6.0
+        - PYTORCH_INDEX=https://download.pytorch.org/whl/rocm5.6
 
     # Runtime variables
     environment: 
