@@ -12,8 +12,8 @@ WORKDIR /root/app
 
 RUN if [ "$(ls -A .)" ]; \
     then \
-        git fetch && \
-        git reset --hard origin/master; \
+        git reset --hard && \
+        git pull; \
     else \
         git clone --depth 1 https://github.com/AUTOMATIC1111/stable-diffusion-webui .; \
     fi && \
