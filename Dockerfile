@@ -18,7 +18,7 @@ RUN if [ "$(ls -A .)" ]; \
         git reset --hard && \
         git pull; \
     else \
-        git clone --depth 1 %A1111_REPO .; \
+        git clone --depth 1 $A1111_REPO .; \
     fi && \
     sed -i -e '/^torch\r/d' requirements.txt && \
     sed -i -e '/^torch\r/d' requirements_versions.txt
