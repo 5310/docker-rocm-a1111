@@ -10,12 +10,15 @@ VOLUME /root/app
 
 WORKDIR /root/app
 
+ARG A1111_REPO=https://github.com/AUTOMATIC1111/stable-diffusion-webui
+ARG PYTORCH_INDEX=https://download.pytorch.org/whl/rocm5.6
+
 RUN if [ "$(ls -A .)" ]; \
     then \
         git reset --hard && \
         git pull; \
     else \
-        git clone --depth 1 https://github.com/AUTOMATIC1111/stable-diffusion-webui .; \
+        git clone --depth 1 %A1111_REPO .; \
     fi && \
     sed -i -e '/^torch\r/d' requirements.txt && \
     sed -i -e '/^torch\r/d' requirements_versions.txt
@@ -24,8 +27,6 @@ ENV DEBIAN_FRONTEND=noninteractive \
     PYTHONUNBUFFERED=1 \
     PYTHONIOENCODING=UTF-8 \
     REQS_FILE='requirements.txt'
-
-ARG PYTORCH_INDEX=https://download.pytorch.org/whl/rocm5.6
 
 RUN python -m venv venv && \
     source venv/bin/activate && \

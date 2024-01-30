@@ -21,6 +21,8 @@ services:
     build:
       context: .
       args:
+        # Web-UI repository
+        - A1111_REPO=https://github.com/AUTOMATIC1111/stable-diffusion-webui
         # PyTorch index override for ROCm
         - PYTORCH_INDEX=https://download.pytorch.org/whl/rocm5.6
 
