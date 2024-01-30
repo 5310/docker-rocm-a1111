@@ -10,7 +10,13 @@ VOLUME /root/app
 
 WORKDIR /root/app
 
-RUN git clone --depth 1 https://github.com/AUTOMATIC1111/stable-diffusion-webui . && \
+RUN if [ "$(ls -A .)" ]; \
+    then \
+        git fetch && \
+        git reset --hard origin/master; \
+    else \
+        git clone --depth 1 https://github.com/AUTOMATIC1111/stable-diffusion-webui .; \
+    fi && \
     sed -i -e '/^torch\r/d' requirements.txt && \
     sed -i -e '/^torch\r/d' requirements_versions.txt
 
@@ -29,6 +35,5 @@ RUN python -m venv venv && \
 
 EXPOSE 7860
 
-ENTRYPOINT git config --global --add safe.directory "*" && \
-           source venv/bin/activate && \
-           python launch.py
+ENTRYPOINT [ "git", "config", "--global", "--add", "safe.directory", "\"*\"", "&&", "source", "venv/bin/activate", "&&", "python", "launch.py" ]
+CMD [ "--precision", "full", "--no-half" ]
