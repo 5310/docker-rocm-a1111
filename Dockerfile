@@ -16,30 +16,30 @@ ENV DEBIAN_FRONTEND=noninteractive \
     PATH=$VIRTUAL_ENV/bin:$PATH \
     REQS_FILE='requirements.txt'
 
-RUN apt-get update && \
+RUN echo Updating system... && \
+    apt-get update && \
     apt-get install -y libglib2.0-0 wget && \
     apt-get clean -y; \
     \
-    git config --global --add safe.directory "*"; \
-    if [ "$(git config --get remote.origin.url) == $A1111_REPO" ]; \
+    echo Setting up Web-UI repository && \
+    git config --global --add safe.directory "*" && \
+    if [ "$(git config --get remote.origin.url)" == "$A1111_REPO" ]; \
     then \
+        echo Existing repository found, updating... && \
         git reset --hard && \
         git pull; \
     else \
-        if [ "$(ls -A .)" ]; \
-        then \
-            echo `/root/app` volume is not a valid repository \
-            exit 1; \
-        else \
-            git clone --depth 1 $A1111_REPO .; \
-        fi; \
+        echo Pulling repository... && \
+        git clone --depth 1 $A1111_REPO .; \
     fi && \
+    echo Patching out the broken PyTorch requirement... && \
     sed -i -e '/^torch\r/d' requirements.txt && \
     sed -i -e '/^torch\r/d' requirements_versions.txt; \
     \
+    echo Setting up Python virtual environment... \
     python -m venv venv && \
-    pip install --upgrade pip wheel && \
-    pip install --force-reinstall torch torchvision torchaudio --index-url $PYTORCH_INDEX;
+    python -m pip install --upgrade pip wheel && \
+    python -m pip install --force-reinstall torch torchvision torchaudio --index-url $PYTORCH_INDEX;
 
 EXPOSE 7860
 
