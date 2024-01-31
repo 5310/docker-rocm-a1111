@@ -16,22 +16,17 @@ services:
       - 7860:7860
     volumes:
       - ./app:/root/app
-
-    # Build-time variables
-    build:
-      context: .
-      args:
-        # Web-UI repository
-        - A1111_REPO=https://github.com/AUTOMATIC1111/stable-diffusion-webui.git
-        # PyTorch index override for ROCm
-        - PYTORCH_INDEX=https://download.pytorch.org/whl/rocm5.6
+    build: .
 
     # Runtime variables
-    environment: 
+    environment:
+      # Web-UI repository
+      - A1111_REPO=https://github.com/AUTOMATIC1111/stable-diffusion-webui.git
+      # PyTorch index override for ROCm
+      - PYTORCH_INDEX=https://download.pytorch.org/whl/rocm5.6
       # Needed for 6XXX series GPUs
       - HSA_OVERRIDE_GFX_VERSION=10.3.0
       # Allows for more use of the VRAM cache
       - PYTORCH_HIP_ALLOC_CONF=garbage_collection_threshold:0.9,max_split_size_mb:256
-      
-    # Web-UI parameters
-    command: --precision full --no-half --no-download-sd-model
+      # Web-UI launch parameters
+      - WEBUI_PARAMS="--precision full --no-half --no-download-sd-model"
