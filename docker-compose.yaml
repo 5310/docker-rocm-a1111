@@ -22,7 +22,7 @@ services:
       context: .
       args:
         # Web-UI repository
-        - A1111_REPO=https://github.com/AUTOMATIC1111/stable-diffusion-webui
+        - A1111_REPO=https://github.com/AUTOMATIC1111/stable-diffusion-webui.git
         # PyTorch index override for ROCm
         - PYTORCH_INDEX=https://download.pytorch.org/whl/rocm5.6
 

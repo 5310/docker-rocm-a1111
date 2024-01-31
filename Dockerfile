@@ -6,7 +6,7 @@ VOLUME /root/app
 
 WORKDIR /root/app
 
-ARG A1111_REPO=https://github.com/AUTOMATIC1111/stable-diffusion-webui
+ARG A1111_REPO=https://github.com/AUTOMATIC1111/stable-diffusion-webui.git
 ARG PYTORCH_INDEX=https://download.pytorch.org/whl/rocm5.6
 
 ENV DEBIAN_FRONTEND=noninteractive \
@@ -21,12 +21,18 @@ RUN apt-get update && \
     apt-get clean -y; \
     \
     git config --global --add safe.directory "*"; \
-    if [ "$(ls -A .)" ]; \
+    if [ "$(git config --get remote.origin.url) == $A1111_REPO" ]; \
     then \
         git reset --hard && \
         git pull; \
     else \
-        git clone --depth 1 $A1111_REPO .; \
+        if [ "$(ls -A .)" ]; \
+        then \
+            echo `/root/app` volume is not a valid repository \
+            exit 1; \
+        else \
+            git clone --depth 1 $A1111_REPO .; \
+        fi; \
     fi && \
     sed -i -e '/^torch\r/d' requirements.txt && \
     sed -i -e '/^torch\r/d' requirements_versions.txt; \
