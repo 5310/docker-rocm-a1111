@@ -11,7 +11,6 @@ WORKDIR /root/app
 ENV DEBIAN_FRONTEND=noninteractive \
     PYTHONUNBUFFERED=1 \
     PYTHONIOENCODING=UTF-8 \
-    VIRTUAL_ENV=$(pwd)/venv \
     PATH=$VIRTUAL_ENV/bin:$PATH \
     REQS_FILE='requirements.txt'
 
