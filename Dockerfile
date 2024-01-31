@@ -43,5 +43,5 @@ RUN echo Updating system... && \
 
 EXPOSE 7860
 
-ENTRYPOINT ["python", "launch.py"]
+ENTRYPOINT ["python", "app/launch.py"]
 CMD ["--precision", "full", "--no-half"]
