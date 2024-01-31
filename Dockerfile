@@ -11,7 +11,6 @@ WORKDIR /root/app
 ENV DEBIAN_FRONTEND=noninteractive \
     PYTHONUNBUFFERED=1 \
     PYTHONIOENCODING=UTF-8 \
-    PATH=$VIRTUAL_ENV/bin:$PATH \
     REQS_FILE='requirements.txt'
 
 ENTRYPOINT  echo Updating system... &&\
