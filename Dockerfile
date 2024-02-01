@@ -22,7 +22,7 @@ ENTRYPOINT  echo Setting up Web-UI repository &&\
             git config --global --add safe.directory "*" &&\
             if [ ! -e initialized ] || [ $WEBUI_UPDATE ]; \
             then \
-                if [ "$(git config --get remote.origin.url)" == "$WEBUI_REPO" ]; \
+                if [ -d .git ] && [ "$(git config --get remote.origin.url)" == "$WEBUI_REPO" ]; \
                 then \
                     echo Existing repository found, updating... &&\
                     git reset --hard &&\
