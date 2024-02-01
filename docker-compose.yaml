@@ -20,13 +20,15 @@ services:
 
     # Runtime variables
     environment:
-      # Web-UI repository
-      - A1111_REPO=https://github.com/AUTOMATIC1111/stable-diffusion-webui.git
       # PyTorch index override for ROCm
       - PYTORCH_INDEX=https://download.pytorch.org/whl/rocm5.6
       # Needed for 6XXX series GPUs
       - HSA_OVERRIDE_GFX_VERSION=10.3.0
       # Allows for more use of the VRAM cache
       - PYTORCH_HIP_ALLOC_CONF=garbage_collection_threshold:0.9,max_split_size_mb:256
+      # Web-UI repository
+      - WEBUI_REPO=https://github.com/AUTOMATIC1111/stable-diffusion-webui.git
+      # Force update Web-UI repository
+      - WEBUI_UPDATE=false
       # Web-UI launch parameters
-      - WEBUI_PARAMS="--precision full --no-half --no-download-sd-model"
+      - WEBUI_PARAMS=--use-cpu all --no-half --skip-torch-cuda-test --enable-insecure-extension-access --no-download-sd-model --do-not-download-clip

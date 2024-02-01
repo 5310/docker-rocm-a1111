@@ -1,41 +1,50 @@
 FROM rocm/pytorch:latest
 
-VOLUME /root/app
-
-EXPOSE 7860
-
 SHELL ["/bin/bash", "-c"]
 
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update &&\
+    apt-get install -y libglib2.0-0 wget &&\
+    apt-get clean -y &&\
+    :;
+
+VOLUME /root/app
 WORKDIR /root/app
+EXPOSE 7860
 
-ENV DEBIAN_FRONTEND=noninteractive \
-    PYTHONUNBUFFERED=1 \
-    PYTHONIOENCODING=UTF-8 \
-    REQS_FILE='requirements.txt'
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONIOENCODING=UTF-8
+ENV VIRTUAL_ENV=$(pwd)/venv
+ENV PATH=$VIRTUAL_ENV/bin:$PATH
 
-ENTRYPOINT  echo Updating system... &&\
-            apt-get update &&\
-            apt-get install -y libglib2.0-0 wget &&\
-            apt-get clean -y &&\
-            \
-            echo Setting up Web-UI repository &&\
+ENTRYPOINT  echo Setting up Web-UI repository &&\
             git config --global --add safe.directory "*" &&\
-            if [ "$(git config --get remote.origin.url)" == "$A1111_REPO" ]; \
+            if [ ! -e initialized ] || [ $WEBUI_UPDATE ]; \
             then \
-                echo Existing repository found, updating... &&\
-                git reset --hard &&\
-                git pull; \
-            else \
-                echo Pulling repository... &&\
-                git clone --depth 1 $A1111_REPO .; \
+                if [ "$(git config --get remote.origin.url)" == "$WEBUI_REPO" ]; \
+                then \
+                    echo Existing repository found, updating... &&\
+                    git reset --hard &&\
+                    git pull &&\
+                    :; \
+                else \
+                    echo Pulling repository... &&\
+                    git clone --depth 1 $WEBUI_REPO . &&\
+                    :; \
+                fi &&\
+                touch initialized &&\
+                \
+                echo Patching out the broken PyTorch requirement... &&\
+                sed -i -e '/^torc \n\r/d' requirements.txt &&\
+                sed -i -e '/^torc \n\r/d' requirements_versions.txt &&\
+                # \
+                echo Setting up Python dependencies... &&\
+                python -m venv venv && \
+                python -m pip install --upgrade pip wheel &&\
+                python -m pip install --upgrade torch torchvision torchaudio --index-url $PYTORCH_INDEX &&\
+                :; \
             fi &&\
-            \
-            echo Patching out the broken PyTorch requirement... &&\
-            sed -i -e '/^torc \n\r/d' requirements.txt &&\
-            sed -i -e '/^torc \n\r/d' requirements_versions.txt &&\
-            \
-            echo Setting up Python dependencies... &&\
-            python -m pip install --upgrade pip wheel &&\
-            python -m pip install --upgrade torch torchvision torchaudio --index-url $PYTORCH_INDEX &&\
             echo Launching Web-UI... &&\
-            python launch.py $WEBUI_PARAMS;
+            echo python launch.py ${WEBUI_PARAMS:---precision full --no-half} &&\
+            :;
