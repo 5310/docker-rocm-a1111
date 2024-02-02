@@ -23,17 +23,12 @@ docker-compose up
 
 ## Update
 
-Rebuild the image and container to (try to) update the app, and underlying dependencies, while retaining your models folder, etc.
+Rebuild the image and container to (try to) update the app, and underlying dependencies, while retaining your models and extensions folders etcetera (but not any other out-of-git changes).
 
 ```bash
-docker-compose up --build --force-recreate
+WEBUI_UPDATE=true docker-compose up --build --force-recreate 
 ```
 
 ## Configuration
 
-At the end of the compose-file are all the parameters that are configurable, with comments describing where they go.
-
-- Edit the `PYTORCH_INDEX` environment variable to the [latest version](https://pytorch.org/get-started/locally/) that you need
-  - This is needed because PyTorch refuses to publish the ROCm and Intel modules as their own packages or provide a `latest` version to install via PIP
-- Edit the `command` parameter to customize what arguments the web-ui runs on
-- Tinker around if things break, I have no idea what I'm doing, I don't even have a GPU anymore!
+At the end of the compose-file are all the parameters that are configurable, with comments.
