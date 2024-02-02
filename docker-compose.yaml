@@ -30,5 +30,6 @@ services:
       - WEBUI_REPO=https://github.com/AUTOMATIC1111/stable-diffusion-webui.git
       # Force update Web-UI repository
       - WEBUI_UPDATE=
-      # Web-UI launch parameters
-      - WEBUI_PARAMS=--use-cpu all --no-half --skip-torch-cuda-test --enable-insecure-extension-access --no-download-sd-model --do-not-download-clip
+      # Web-UI arguments
+      # https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/Command-Line-Arguments-and-Settings
+      - WEBUI_ARGS=--listen --enable-insecure-extension-access --no-download-sd-model

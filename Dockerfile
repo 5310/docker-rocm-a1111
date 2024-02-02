@@ -5,8 +5,9 @@ SHELL ["/bin/bash", "-cx"]
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update &&\
-    apt-get install -y libglib2.0-0 wget &&\
+    apt-get install -y git libglib2.0-0 wget &&\
     apt-get clean -y &&\
+    git config --global --add safe.directory "*" &&\
     :;
 
 VOLUME /root/app
@@ -15,32 +16,43 @@ EXPOSE 7860
 
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONIOENCODING=UTF-8
-ENV VIRTUAL_ENV=$(pwd)/venv
-ENV PATH=$VIRTUAL_ENV/bin:$PATH
+ENV IGNORE_CMD_ARGS_ERRORS=true
+ENV REQS_FILE=requirements.txt
+ENV PYTORCH_INDEX=${PYTORCH_INDEX:-PYTORCH_INDEX=https://download.pytorch.org/whl/rocm5.7}
+ENV WEBUI_REPO=${WEBUI_REPO:-https://github.com/AUTOMATIC1111/stable-diffusion-webui.git}
+ENV WEBUI_ARGS=${WEBUI_ARGS:---no-download-sd-model}
 
 ENTRYPOINT  echo Setting up Web-UI repository &&\
-            git config --global --add safe.directory "*" &&\
             if [ ! -e initialized ] || [ $WEBUI_UPDATE ]; \
             then \
-                if [ -d .git ] && [ "$(git config --get remote.origin.url)" == "${WEBUI_REPO:-https://github.com/AUTOMATIC1111/stable-diffusion-webui.git}" ]; \
+                if [ -d .git ] && [ "$(git config --get remote.origin.url)" == "$WEBUI_REPO" ]; \
                 then \
-                    echo Existing repository found, updating... &&\
-                    git reset --hard &&\
-                    git pull &&\
+                    echo Existing repository found... &&\
                     :; \
                 else \
-                    echo Pulling repository... &&\
-                    git clone --depth 1 ${WEBUI_REPO:-https://github.com/AUTOMATIC1111/stable-diffusion-webui.git} . &&\
+                    echo "Cloning" new repository... &&\
+                    # This whole dance is needed because we want to commit this folder to retain ownership
+                    rm -Rf .git &&\
+                    git clone --no-checkout $WEBUI_REPO /tmp/repo &&\
+                    mv /tmp/repo/.git .git &&\
                     :; \
                 fi &&\
-                touch initialized &&\
+                echo Pulling data... &&\
+                git reset --hard &&\
+                git pull --depth 1 &&\
                 \
                 echo Setting up Python dependencies... &&\
-                python -m venv venv && \
+                python -m venv venv &&\
+                source venv/bin/activate &&\
                 python -m pip install --upgrade pip wheel &&\
-                python -m pip install --upgrade --force-reinstall torch torchvision torchaudio --index-url ${PYTORCH_INDEX:-PYTORCH_INDEX=https://download.pytorch.org/whl/rocm5.7} &&\
+                python -m pip install --upgrade --force-reinstall torch torchvision torchaudio --index-url $PYTORCH_INDEX &&\
+                deactivate &&\
+                \
+                touch initialized &&\
                 :; \
             fi &&\
+            \
             echo Launching Web-UI... &&\
-            python launch.py ${WEBUI_PARAMS:---precision full --no-half} &&\
+            source venv/bin/activate &&\
+            python launch.py $WEBUI_ARGS &&\
             :;
