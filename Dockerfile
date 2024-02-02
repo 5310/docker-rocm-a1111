@@ -46,5 +46,5 @@ ENTRYPOINT  echo Setting up Web-UI repository &&\
                 :; \
             fi &&\
             echo Launching Web-UI... &&\
-            echo python launch.py ${WEBUI_PARAMS:---precision full --no-half} &&\
+            python launch.py ${WEBUI_PARAMS:---precision full --no-half} &&\
             :;
