@@ -3,15 +3,15 @@ services:
   rocm-a1111:
     cap_add:
       - SYS_PTRACE
-    # devices:
-    #   - /dev/kfd:/dev/kfd
-    #   - /dev/dri:/dev/dri
+    devices:
+      - /dev/kfd:/dev/kfd
+      - /dev/dri:/dev/dri
     ipc: host
     security_opt:
       - seccomp:unconfined
-    # group_add:
-    #   - video
-    #   - render
+    group_add:
+      - video
+      - render
     ports:
       - 7860:7860
     volumes:

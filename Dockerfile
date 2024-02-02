@@ -1,15 +1,8 @@
-# FROM rocm/pytorch:latest
-FROM ubuntu:20.04
+FROM rocm/pytorch:latest
 
 SHELL ["/bin/bash", "-cx"]
 
 ENV DEBIAN_FRONTEND=noninteractive
-
-RUN apt-get update &&\
-    apt-get install -y git python3 python3-venv python3-pip &&\
-    apt-get clean &&\
-    ln -s /usr/bin/python3 /usr/bin/python &&\
-    :
 
 RUN apt-get update &&\
     apt-get install -y libglib2.0-0 wget &&\
@@ -43,8 +36,8 @@ ENTRYPOINT  echo Setting up Web-UI repository &&\
                 touch initialized &&\
                 \
                 echo Patching out the broken PyTorch requirement... &&\
-                sed -i -e '/^torc \n\r/d' requirements.txt &&\
-                sed -i -e '/^torc \n\r/d' requirements_versions.txt &&\
+                sed -i -e '/^torch\n\r/d' requirements.txt &&\
+                sed -i -e '/^torch\n\r/d' requirements_versions.txt &&\
                 \
                 echo Setting up Python dependencies... &&\
                 python -m venv venv && \
