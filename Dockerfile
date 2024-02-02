@@ -38,7 +38,7 @@ ENTRYPOINT  echo Setting up Web-UI repository &&\
                 echo Patching out the broken PyTorch requirement... &&\
                 sed -i -e '/^torc \n\r/d' requirements.txt &&\
                 sed -i -e '/^torc \n\r/d' requirements_versions.txt &&\
-                # \
+                \
                 echo Setting up Python dependencies... &&\
                 python -m venv venv && \
                 python -m pip install --upgrade pip wheel &&\
