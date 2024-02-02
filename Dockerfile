@@ -35,14 +35,10 @@ ENTRYPOINT  echo Setting up Web-UI repository &&\
                 fi &&\
                 touch initialized &&\
                 \
-                echo Patching out the broken PyTorch requirement... &&\
-                sed -i -e '/^torch\n\r/d' requirements.txt &&\
-                sed -i -e '/^torch\n\r/d' requirements_versions.txt &&\
-                \
                 echo Setting up Python dependencies... &&\
                 python -m venv venv && \
                 python -m pip install --upgrade pip wheel &&\
-                python -m pip install --upgrade torch torchvision torchaudio --index-url ${PYTORCH_INDEX:-PYTORCH_INDEX=https://download.pytorch.org/whl/rocm5.7} &&\
+                python -m pip install --upgrade --force-reinstall torch torchvision torchaudio --index-url ${PYTORCH_INDEX:-PYTORCH_INDEX=https://download.pytorch.org/whl/rocm5.7} &&\
                 :; \
             fi &&\
             echo Launching Web-UI... &&\
