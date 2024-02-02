@@ -24,7 +24,6 @@ ENV PYTHONUNBUFFERED=1
 ENV PYTHONIOENCODING=UTF-8
 ENV VIRTUAL_ENV=$(pwd)/venv
 ENV PATH=$VIRTUAL_ENV/bin:$PATH
-ENV python="echo python"
 
 ENTRYPOINT  echo Setting up Web-UI repository &&\
             git config --global --add safe.directory "*" &&\
