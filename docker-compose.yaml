@@ -3,15 +3,15 @@ services:
   rocm-a1111:
     cap_add:
       - SYS_PTRACE
-    devices:
-      - /dev/kfd:/dev/kfd
-      - /dev/dri:/dev/dri
+    # devices:
+    #   - /dev/kfd:/dev/kfd
+    #   - /dev/dri:/dev/dri
     ipc: host
     security_opt:
       - seccomp:unconfined
-    group_add:
-      - video
-      - render
+    # group_add:
+    #   - video
+    #   - render
     ports:
       - 7860:7860
     volumes:
@@ -29,6 +29,6 @@ services:
       # Web-UI repository
       - WEBUI_REPO=https://github.com/AUTOMATIC1111/stable-diffusion-webui.git
       # Force update Web-UI repository
-      - WEBUI_UPDATE=false
+      - WEBUI_UPDATE=
       # Web-UI launch parameters
       - WEBUI_PARAMS=--use-cpu all --no-half --skip-torch-cuda-test --enable-insecure-extension-access --no-download-sd-model --do-not-download-clip
