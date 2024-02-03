@@ -42,8 +42,8 @@ ENTRYPOINT  echo Setting up Web-UI repository &&\
                 git pull --depth 1 &&\
                 \
                 echo Patching out the broken PyTorch requirement... &&\
-                sed -i -e '/^torch\n\r/d' requirements.txt &&\
-                sed -i -e '/^torch\n\r/d' requirements_versions.txt &&\
+                sed -i -e '/^torch\r/d' requirements.txt &&\
+                sed -i -e '/^torch\r/d' requirements_versions.txt &&\
                 \
                 echo Setting up Python dependencies... &&\
                 python -m venv venv &&\
