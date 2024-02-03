@@ -41,11 +41,15 @@ ENTRYPOINT  echo Setting up Web-UI repository &&\
                 git reset --hard &&\
                 git pull --depth 1 &&\
                 \
+                echo Patching out the broken PyTorch requirement... &&\
+                sed -i -e '/^torch\n\r/d' requirements.txt &&\
+                sed -i -e '/^torch\n\r/d' requirements_versions.txt &&\
+                \
                 echo Setting up Python dependencies... &&\
                 python -m venv venv &&\
                 source venv/bin/activate &&\
                 python -m pip install --upgrade pip wheel &&\
-                python -m pip install --upgrade --force-reinstall torch torchvision torchaudio --index-url $PYTORCH_INDEX &&\
+                python -m pip install --upgrade torch torchvision torchaudio --index-url $PYTORCH_INDEX &&\
                 deactivate &&\
                 \
                 touch initialized &&\
