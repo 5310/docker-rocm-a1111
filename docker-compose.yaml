@@ -1,6 +1,6 @@
 version: "2"
 services: 
-  rocm-a1111:
+  singleton:
     container_name: rocm-a1111
     cap_add:
       - SYS_PTRACE
