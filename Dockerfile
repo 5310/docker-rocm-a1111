@@ -17,7 +17,6 @@ EXPOSE 7860
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONIOENCODING=UTF-8
 ENV IGNORE_CMD_ARGS_ERRORS=true
-ENV REQS_FILE=requirements.txt
 ENV PYTORCH_INDEX=${PYTORCH_INDEX:-PYTORCH_INDEX=https://download.pytorch.org/whl/rocm5.7}
 ENV WEBUI_REPO=${WEBUI_REPO:-https://github.com/AUTOMATIC1111/stable-diffusion-webui.git}
 ENV WEBUI_ARGS=${WEBUI_ARGS:---no-download-sd-model}
@@ -40,10 +39,6 @@ ENTRYPOINT  echo Setting up Web-UI repository &&\
                 echo Pulling data... &&\
                 git reset --hard &&\
                 git pull --depth 1 &&\
-                \
-                echo Patching out the broken PyTorch requirement... &&\
-                sed -i -e '/^torch\r/d' requirements.txt &&\
-                sed -i -e '/^torch\r/d' requirements_versions.txt &&\
                 \
                 echo Setting up Python dependencies... &&\
                 python -m venv venv &&\
