@@ -1,6 +1,7 @@
 version: "2"
 services: 
   rocm-a1111:
+    container_name : "SD-webui"
     cap_add:
       - SYS_PTRACE
     devices:
