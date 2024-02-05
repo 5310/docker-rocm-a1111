@@ -21,16 +21,16 @@ services:
 
     # Runtime variables
     environment:
+      # Web-UI arguments
+      # https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/Command-Line-Arguments-and-Settings
+      - COMMANDLINE_ARGS=--listen --enable-insecure-extension-access --no-download-sd-model
       # PyTorch index override for ROCm
-      - PYTORCH_INDEX=https://download.pytorch.org/whl/rocm5.7
+      - TORCH_INDEX=https://download.pytorch.org/whl/rocm5.7
+      # Web-UI repository
+      - REPO=https://github.com/AUTOMATIC1111/stable-diffusion-webui.git
+      # Force update Web-UI repository, empty for false
+      - UPDATE=
       # Needed for 6XXX series GPUs
       - HSA_OVERRIDE_GFX_VERSION=10.3.0
       # Allows for more use of the VRAM cache
       - PYTORCH_HIP_ALLOC_CONF=garbage_collection_threshold:0.9,max_split_size_mb:256
-      # Web-UI repository
-      - WEBUI_REPO=https://github.com/AUTOMATIC1111/stable-diffusion-webui.git
-      # Force update Web-UI repository
-      - WEBUI_UPDATE=
-      # Web-UI arguments
-      # https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/Command-Line-Arguments-and-Settings
-      - WEBUI_ARGS=--listen --enable-insecure-extension-access --no-download-sd-model
