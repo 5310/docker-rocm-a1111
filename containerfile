@@ -1,12 +1,12 @@
-FROM rocm/pytorch:latest
+FROM docker://rocm/pytorch:latest
 
-ENV DEBIAN_FRONTEND=noninteractive
+# ENV DEBIAN_FRONTEND=noninteractive
 
-RUN apt-get update &&\
-    apt-get install -y git libglib2.0-0 wget libgl1-mesa-glx &&\
-    apt-get clean -y &&\
-    git config --global --add safe.directory "*" &&\
-    :;
+# RUN apt-get update &&\
+#     apt-get install -y git libglib2.0-0 wget libgl1-mesa-glx &&\
+#     apt-get clean -y &&\
+#     git config --global --add safe.directory "*" &&\
+#     :;
 
 VOLUME /root/app
 WORKDIR /root/app
